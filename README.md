@@ -23,15 +23,6 @@ This repository is an introduction to starting the advanced Java learning path.
 
 ---
 
-## 📄 Sample code: `HelloWorld.java`
-
-```java
-public class HelloWorld {
-    public static void main(String[] args) {
-        System.out.println("Hello World!");
-    }
-}
-
 
 🚀 Editor used
 
