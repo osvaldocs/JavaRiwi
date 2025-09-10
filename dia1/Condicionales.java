@@ -1,3 +1,5 @@
+package dia1;
+
 import java.util.Scanner;
 
 public class Condicionales {
@@ -21,6 +23,43 @@ public class Condicionales {
             System.out.println("Niño");
         }
     }
+
+    public static void opcion(int numero) {
+
+        switch (numero) {
+            case 1:
+                System.out.println("Lunes");
+                break;
+
+            case 2:
+                System.out.println("Martes");
+                break;
+
+            case 3:
+                System.out.println("Miercoles");
+                break;
+
+            case 4:
+                System.out.println("Jueves");
+                break;
+
+            case 5:
+                System.out.println("Viernes");
+                break;
+
+            case 6:
+                System.out.println("Sabao");
+                break;
+
+            case 7:
+                System.out.println("Domingo");
+                break;
+
+            default:
+                System.out.println("Opción no válida");
+                break;
+        }
+    }
     public static void main(String[] args) {
         /**
          Actividad 5 – If - Else
@@ -37,6 +76,15 @@ public class Condicionales {
          "Niño" si tiene menos de 12.
          "Adolescente" si tiene entre 12 y 17.
          "Adulto" si tiene 18 o más.
+
+         Actividad 7 – Switch
+         Crea un programa que pida un número del 1 al 7 y muestre el día de la semana:
+
+         1 → Lunes
+         2 → Martes
+         3 → Miércoles
+         …
+         7 → Domingo
          */
 
         clasificador(45);
@@ -49,6 +97,11 @@ public class Condicionales {
         int edad = Integer.parseInt(edadStr);
 
         esMayor(edad);
+
+        System.out.println("Ingrese un número del 1 al 7");
+        int numero = Integer.parseInt(scanner.nextLine());
+
+        opcion(numero);
 
     }
 }

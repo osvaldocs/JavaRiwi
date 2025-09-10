@@ -1,3 +1,5 @@
+package dia1;
+
 public class Operadores {
     static int a = 10;
     static int b = 15;
