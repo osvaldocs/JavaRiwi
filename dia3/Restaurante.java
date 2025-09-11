@@ -93,7 +93,6 @@ public class Restaurante {
 
                 case "3":
                     System.out.println(thankYou);
-                    customers--;
                     break;
 
                 case "4":
