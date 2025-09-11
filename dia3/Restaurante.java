@@ -1,4 +1,5 @@
 package dia3;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Restaurante {
@@ -13,19 +14,29 @@ public class Restaurante {
         System.out.print("Chose an option: ");
     }
 
-    public static void dishesMenu() {
-        System.out.println("===  Menu ===");
-        System.out.println("1. Rib eye");
-        System.out.println("2. Tomahawk");
-        System.out.println("3. Milanesa napolitana");
-        System.out.println("4. Sorrentino capresse");
-        System.out.println("5. Bottle of Red wine Catena Zapata");
-        System.out.println("6. Coke zero");
-        System.out.println("7. Fernet con Coca");
-        System.out.println("8. Flan con dulce de leche");
-        System.out.print("0. Return to the main menu ");
-        System.out.print("Chose an option: ");
+    static ArrayList<String> dishes = new ArrayList<>();
+
+    public static void fullDishes() {
+        dishes.add("===  Menu ===");
+        dishes.add("1. Rib eye");
+        dishes.add("2. Tomahawk");
+        dishes.add("3. Milanesa napolitana");
+        dishes.add("4. Sorrentino capresse");
+        dishes.add("5. Bottle of Red wine Catena Zapata");
+        dishes.add("6. Coke zero");
+        dishes.add("7. Fernet con Coca");
+        dishes.add("8. Flan con dulce de leche");
+        dishes.add("0. Return to the main menu");
+        dishes.add("Chose an option: ");
     }
+
+    public static void displayDishes(ArrayList<String> array) {
+        for (String item : array) {
+            System.out.println(item);
+        }
+    }
+
+
 
     public static String userEntry(Scanner scanner) {
 
@@ -47,6 +58,9 @@ public class Restaurante {
         String wifipassword = "Qwe.123*";
         String thankYou = "Thank you very much for your visit, we hope to see you again soon!";
 
+
+
+
         System.out.println(welcome);
 
         do {
@@ -56,11 +70,18 @@ public class Restaurante {
             switch (option) {
                 case "1":
                     String suboption;
+                    fullDishes();
+                    displayDishes(dishes);
                     do {
-                        dishesMenu();
+
                         suboption = userEntry(scanner);
                         if (!suboption.equals("0")) {
-                            System.out.println("Your order is: " + suboption);
+                            for (String item : dishes) {
+                                if (item.startsWith(suboption + ".")) {
+                                    System.out.println("Your order is: " + item);
+                                    break;
+                                }
+                            }
                             customers++;
                         }
                     } while (!suboption.equals("0"));
@@ -79,11 +100,10 @@ public class Restaurante {
                     System.out.println("Ding ding! The waiter appears out of nowhere 🤵🍽️");
                     break;
             }
-            } while(!option.equals("0"));
+        } while(!option.equals("0"));
         System.out.println(thankYou);
         scanner.close();
 
         showCustomerCount(customers);
-        }
     }
-
+}
