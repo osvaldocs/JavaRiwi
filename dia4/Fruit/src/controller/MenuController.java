@@ -1,7 +1,8 @@
 package controller;
 import javax.swing.JOptionPane;
 import model.Fruit;
-import service.CalculatorService;
+
+import static model.Fruit.fruitInput;
 
 
 public class MenuController {
@@ -13,7 +14,7 @@ public class MenuController {
 
 
     public static void showMenu() {
-                  String[] opciones = {"Add new product", "List inventory", "Buy product", "Order by price", "Search product by name", "Check Out", "Exit program"};
+                  String[] opciones = {"Create fruit", "List inventory", "Search fruit by Id or name", "Update fruit", "Delete fruit by Id", "Exit program"};
                   int opcion;
 
                   do {
@@ -30,45 +31,13 @@ public class MenuController {
 
                       switch (opcion) {
                           case 0: // Add product
-                              Fruit.producInput();
+                              fruitInput();
                               break;
                           case 1: // List inventory
-                              Fruit.showProducts();
+                              Fruit.showFruits();
                               break;
-                          case 2: // Buy product
-                              String[] disponibles = Fruit.getAvailableProducts();
-                              if (disponibles.length == 0) {
-                                  JOptionPane.showMessageDialog(null, "No products available.");
-                                  break;
-                              }
-
-                              String seleccion = (String) JOptionPane.showInputDialog(
-                                      null,
-                                      "Select a product:",
-                                      "Buy product",
-                                      JOptionPane.PLAIN_MESSAGE,
-                                      null,
-                                      disponibles,
-                                      disponibles[0]
-                              );
-                              if (seleccion == null) break;
-                              String productName = seleccion.split(" \\(")[0];
-
-                              String qtyStr = JOptionPane.showInputDialog("Quantity:");
-                              int qty;
-                              try {
-                                  qty = Integer.parseInt(qtyStr);
-                              } catch (NumberFormatException e) {
-                                  JOptionPane.showMessageDialog(null, "Invalid quantity.");
-                                  break;
-                              }
-
-                              if (CalculatorService.buyProduct(productName, qty)) {
-                                  JOptionPane.showMessageDialog(null, "Added to cart!");
-                              } else {
-                                  JOptionPane.showMessageDialog(null, "Not enough stock.");
-                              }
-                              break;
+                          case 2: // Search fruit
+                              String query = JOptionPane.showInputDialog(null, "Enter the ID, or the name of the fruit");
 
                           case 3: // Order by price
                               String resultado = Fruit.getCheapestAndMostExpensive();
@@ -82,13 +51,7 @@ public class MenuController {
                               JOptionPane.showMessageDialog(null, results);
                               break;
 
-                          case 5: // Check Out
-                              String ticket = CalculatorService.generateTicket();
-                              JOptionPane.showMessageDialog(null, ticket);
-                              CalculatorService.clearCart();
-                              break;
-
-                          case 6: // Salir
+                          case 5: // Salir
                           case JOptionPane.CLOSED_OPTION:
                               JOptionPane.showMessageDialog(null, "See you!.");
                               break;
@@ -97,7 +60,7 @@ public class MenuController {
                               break;
                       }
 
-                  } while (opcion != 6 && opcion != JOptionPane.CLOSED_OPTION);
+                  } while (opcion != 5 && opcion != JOptionPane.CLOSED_OPTION);
               }
 
 
