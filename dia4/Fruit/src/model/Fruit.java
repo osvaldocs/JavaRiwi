@@ -81,7 +81,7 @@ public class Fruit {
     }
 
     static ArrayList<Fruit> fruits = new ArrayList<>();
-    static HashMap<String, Integer> stock= new HashMap<>();
+
 
 
     public static void addFruit(Fruit fruit) {
@@ -113,7 +113,7 @@ public class Fruit {
         String fruitWeightInput = JOptionPane.showInputDialog("Please enter fruit weight:");
         double fruitWeight;
         try {
-            fruitWeight = Double.parseDouble(fruitPrice);
+            fruitWeight = Double.parseDouble(fruitWeightInput);
             if (fruitWeight <= 0) {
                 JOptionPane.showMessageDialog(null, "The weight must be greater than 0");
                 return;
@@ -137,9 +137,19 @@ public class Fruit {
         }
 
         String fruitColor = JOptionPane.showInputDialog("Please enter the color fruit");
+        if (fruitColor == null || fruitColor.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Invalid name.");
+            return;
+        }
+
+        int answer1 = JOptionPane.showConfirmDialog(null, "Is the fruit organic?", "Confirm", JOptionPane.YES_NO_OPTION);
+        boolean isOrganic = (answer1 == JOptionPane.YES_NO_OPTION);
+
+        int answer2 = JOptionPane.showConfirmDialog(null, "Is the fruit imported?", "Confirm", JOptionPane.YES_NO_OPTION);
+        boolean isImported = (answer2 == JOptionPane.YES_NO_OPTION);
 
 
-        addFruit(new Fruit(fruitName,));
+        addFruit(new Fruit(fruitName, fruitWeight, fruitColor,decimalPrice, isOrganic, isImported));
         JOptionPane.showMessageDialog(null, "Product added correctly");
     }
 
@@ -153,107 +163,70 @@ public class Fruit {
     }
 
 
-    public static void showProducts() {
-        if (products.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "No products available");
+    public static void showFruits() {
+        if (fruits.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "No fruits available");
             return;
         }
-        StringBuilder sb = new StringBuilder("Inventory:\n");
-        for (int i = 0; i < products.size(); i++) {
-            String name = products.get(i);
-            double price = prices.get(i);
-            int quantity = stock.getOrDefault(name, 0);
-            sb.append((i + 1) + ". " + name + " - $" + price + " - Stock: " + quantity + "\n");
+        StringBuilder sb = new StringBuilder("Inventory:\n\n");
+
+        for (int i = 0; i < fruits.size(); i++) {
+            Fruit fruit = fruits.get(i);
+            sb.append((i + 1)).append(". ")
+                    .append(fruit.getName()).append(" | ")
+                    .append("Color: ").append(fruit.getColor()).append(" | ")
+                    .append("Weight: ").append(String.format("%.2f", fruit.getWeightKg())).append(" Kg | ")
+                    .append("Price: $").append(String.format("%.2f", fruit.getPrice())).append(" | ")
+                    .append("Organic: ").append(fruit.isOrganic() ? "Yes" : "No").append(" | ")
+                    .append("Imported: ").append(fruit.isImported() ? "Yes" : "No")
+                    .append("\n");
         }
         JOptionPane.showMessageDialog(null, sb.toString());
+
     }
 
-    public static boolean reduceStock(String productName, int quantity) {
-        if (!stock.containsKey(productName)) {
-            return false;
-        }
-        int current = stock.get(productName);
-        if (current < quantity) {
-            return false;
-        }
-        stock.put(productName, current - quantity);
-        return true;
-    }
 
-    public static double getPrice(String productName) {
-        int index = products.indexOf(productName);
-        return prices.get(index);
-    }
-
-    public static String[] getAvailableProducts() {
-        java.util.List<String> disponibles = new java.util.ArrayList<>();
-        for (String nombre : products) {
-            int stockActual = stock.getOrDefault(nombre, 0);
-            if (stockActual > 0) {
-                disponibles.add(nombre + " (Stock: " + stockActual + ")");
-            }
-        }
-        return disponibles.toArray(new String[0]);
-    }
-
-    public static String getCheapestAndMostExpensive() {
-        if (products.isEmpty()) {
-            return "No products available.";
-        }
-
-        double minPrice = prices.get(0);
-        double maxPrice = prices.get(0);
-        String minName = products.get(0);
-        String maxName = products.get(0);
-
-        for (int i = 1; i < prices.size(); i++) {
-            double price = prices.get(i);
-            String name = products.get(i);
-            if (price < minPrice) {
-                minPrice = price;
-                minName = name;
-            }
-            if (price > maxPrice) {
-                maxPrice = price;
-                maxName = name;
-            }
-        }
-
-        return "Cheapest: " + minName + " ($" + minPrice + ")\n"
-                + "Most expensive: " + maxName + " ($" + maxPrice + ")";
-    }
-
-    public static String searchProductsById(String query) {
-        if (products.isEmpty()) {
-            return "No products available.";
+    public static Fruit searchByName(ArrayList<Fruit> fruits, String query) {
+        if (fruits == null || fruits.isEmpty()) {
+            return null;
         }
 
         if (query == null || query.trim().isEmpty()) {
-            return "Please enter a search term.";
+            return null;
         }
 
-        StringBuilder sb = new StringBuilder("Search results:\n");
         String lowerQuery = query.toLowerCase();
-        boolean found = false;
 
-        for (int i = 0; i < products.size(); i++) {
-            String name = products.get(i);
-            if (name.toLowerCase().contains(lowerQuery)) {
-                double price = prices.get(i);
-                int stockActual = stock.getOrDefault(name, 0);
-                sb.append(name)
-                        .append(" - $").append(price)
-                        .append(" (Stock: ").append(stockActual).append(")\n");
-                found = true;
+        for (Fruit fruit : fruits) {
+            if (fruit.getName().toLowerCase().contains(lowerQuery)) {
+                return fruit; // retorna el primero que coincide
             }
         }
 
-        if (!found) {
-            return "No products match your search.";
+        return null; // no se encontró ninguno
+    }
+
+
+    public Fruit searchById(ArrayList<Fruit> fruits, int id) {
+        if (fruits == null || fruits.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Error, there are no fruits yet.");
+            return null;
         }
 
-        return sb.toString();
+        if (id < 0) {
+            JOptionPane.showMessageDialog(null, "Error id not found");
+            return null;
+        }
+
+        for (Fruit fruit : fruits) {
+            if (fruit.getId() == id) {
+                return fruit;
+            }
+        }
+
+        return null;
     }
+
 
 
 }
